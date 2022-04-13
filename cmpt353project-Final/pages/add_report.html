@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add Report</title>
+    </head>
+
+    <body onload="authenticate()">
+        <h1>Add Report</h1>
+
+        <form>
+            <label for="fname">First name:</label><br>
+            <input type="text" id="fname" name="fname"><br>
+
+            <label for="lname">Last name:</label><br>
+            <input type="text" id="lname" name="lname"><br>
+
+            <label for="report">Report:</label><br>
+            <textarea id="report" name="report" rows=12 cols="60"  ></textarea>
+        </form>
+
+
+        <button onclick="addReport()">ADD</button>
+        <button onclick="window.location.href='../index'">BACK</button>
+    </body>
+
+
+    <script>
+        function addReport()
+        {
+            let http = new XMLHttpRequest();
+            let url = '/customer_report';
+
+            let firstName= 'firstName=' + document.getElementById("fname").value;
+            let lastName= 'lastName=' + document.getElementById("lname").value;
+            let report= 'report=' + document.getElementById("report").value;
+
+            http.open('POST', url, true);
+
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.send(lastName+'&'+firstName+'&'+report);
+
+            http.onreadystatechange = function()
+            {
+                if(http.readyState === 4 && http.status === 200)
+                {
+                    alert(http.responseText);
+                    window.location.href='./report'
+                }
+            };
+        }
+
+        function authenticate(){
+            let http = new XMLHttpRequest();
+            let url = '/authenticate';
+
+            http.open('GET', url, true);
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.send()
+
+            http.onreadystatechange = function()
+            {
+                if(http.readyState === 4 && http.status === 401)
+                {
+                    window.location.href='./';
+                }
+            };
+        }
+    </script>
+</html>
+

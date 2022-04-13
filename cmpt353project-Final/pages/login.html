@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+    </head>
+
+    <body>
+        <h1 style="text-align:center">Women at Risk Saskatoon</h1>
+        <h2 style="text-align:center">Please login: </h2>
+
+        <div style="text-align:center">
+            <form>
+                <label for="userName">User Name:</label><br>
+                <input type="text" id="userName" name="userName"><br>
+
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password">
+
+            </form>
+
+            <br>
+            <button id='btn' onclick="login(); async">Login</button>
+        </div>
+
+    </body>
+
+
+    <script>
+
+
+        document.getElementById("userName").addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btn").click();
+            }
+        });
+
+        document.getElementById("password").addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btn").click();
+            }
+        });
+
+
+        async function login(){
+
+            let http = new XMLHttpRequest();
+            let url = '/login';
+
+            let userName= 'userName=' + document.getElementById("userName").value;
+            let password= 'password=' + document.getElementById("password").value;
+
+
+            http.open('POST', url, true);
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.send(userName+'&'+password);
+
+            http.onreadystatechange = function()
+            {
+                if(http.readyState === 4 && http.status === 200) {
+                    window.location.href='/index';
+
+                } else if (http.readyState === 4 && http.status === 401){
+                    alert("ERROR, invalid login")
+                    window.location.href='../';
+                }
+            };
+        }
+    </script>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add Customer</title>
+    </head>
+
+    <body onload="authenticate()">
+        <h1>Add Customer</h1>
+
+        <form>
+            <label for="fname">First name:</label><br>
+            <input type="text" id="fname" name="fname"><br>
+
+            <label for="lname">Last name:</label><br>
+            <input type="text" id="lname" name="lname"><br>
+
+            <label for="pNumber">Phone number:</label><br>
+            <input type="text" id="pNumber" name="pNumber" onkeydown="inputValidate()"><br>
+
+            <label for="notes">Notes:</label><br>
+            <input type="text" id="notes" name="notes">
+        </form>
+
+
+        <button onclick="addCustomer()">ADD</button>
+        <button onclick="window.location.href='../customers'">BACK</button>
+    </body>
+
+    <script>
+        function addCustomer()
+        {
+
+            let http = new XMLHttpRequest();
+            let url = '/customer_reg';
+
+            let firstName= 'firstName=' + document.getElementById("fname").value;
+            let lastName= 'lastName=' + document.getElementById("lname").value;
+            let phoneNumber= 'phoneNumber=' + document.getElementById("pNumber").value;
+            let notes= 'notes=' + document.getElementById("notes").value;
+
+            http.open('POST', url, true);
+
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.send(lastName+'&'+firstName+'&'+phoneNumber+'&'+notes);
+
+            http.onreadystatechange = function()
+            {
+                if(http.readyState === 4 && http.status === 200)
+                {
+
+                    alert(http.responseText);
+                    window.location.href='../customers'
+                }
+
+            };
+        }
+
+        function authenticate(){
+            let http = new XMLHttpRequest();
+            let url = '/authenticate';
+
+            http.open('GET', url, true);
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            http.send()
+
+            http.onreadystatechange = function()
+            {
+                if(http.readyState === 4 && http.status === 401)
+                {
+                    window.location.href='./';
+                }
+            };
+        }
+
+        function inputValidate(){
+            var e = event || window.event;  
+            var key = e.keyCode || e.which;                              
+            if (!(((key>=48)&&(key<=57))|| (key==8) || (key == 46) || (key==9))) { //allow backspace //and delete
+                if (e.preventDefault) e.preventDefault(); 
+                    e.returnValue = false; 
+   }
+ }
+    </script>
+
+</html>
+
+

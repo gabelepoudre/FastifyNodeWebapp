@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Add Login</title>
+  </head>
+  <body onload="authenticate()">
+    <h1>HELLO THERE</h1>
+
+    <form>
+        <label for="userName">User Name:</label><br>
+        <input type="text" id="userName" name="userName"><br>
+
+        <label for="password1">Password:</label><br>
+        <input type="password" id="password1" name="password1"><br>
+
+        <label for="password2">Confirm Password:</label><br>
+        <input type="password" id="password2" name="password2"><br>
+
+    </form>
+
+    <button onclick="addLogin(); async ">ADD</button>
+    <button onclick="window.location.href='../index'">BACK</button>
+
+
+  </body>
+
+
+  <script>
+      async function addLogin(){
+          let passwordTest = document.getElementById('password1').value;
+
+          if (passwordTest !== document.getElementById('password2').value){
+              alert("Error, passwords do not match");
+              return;
+          }
+
+          let http = new XMLHttpRequest();
+          let url = '/add_login';
+
+          let userName = 'userName=' + document.getElementById("userName").value;
+          let password = 'password=' + passwordTest;
+
+          http.open('POST', url, true);
+          http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+          http.send(userName+'&'+password);
+
+          http.onreadystatechange = function()
+          {
+              if(http.readyState === 4 && http.status === 200)
+              {
+                  alert(http.responseText);
+                  window.location.href='../index'
+              }
+          };
+      }
+
+      function authenticate(){
+          let http = new XMLHttpRequest();
+          let url = '/authenticate';
+
+          http.open('GET', url, true);
+          http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+          http.send()
+
+          http.onreadystatechange = function()
+          {
+              if(http.readyState === 4 && http.status === 401)
+              {
+                  window.location.href='./';
+              }
+          };
+      }
+
+  </script>
+
+</html>
